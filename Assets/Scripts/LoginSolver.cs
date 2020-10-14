@@ -37,10 +37,11 @@ public class LoginSolver : MonoBehaviour
             isLoggedIn = true;
             m_ScreenTransitionHandler.TransitionToScreen(ScreenTransitionHandler.ScreenName.LoginScreen, ScreenTransitionHandler.ScreenName.EmployeeScreen, true);
         }
-        else if (m_Password.text == "admin" && isLoggedIn == false && m_Login.text == "funcionario@dipolum.com")
+        else if (m_Password.text == "admin" && isLoggedIn == false && m_Login.text == "supervisor@dipolum.com")
         {
             isLoggedIn = true;
-            m_ScreenTransitionHandler.TransitionToScreen(ScreenTransitionHandler.ScreenName.LoginScreen, ScreenTransitionHandler.ScreenName.EmployeeScreen, true);
+            //m_ScreenTransitionHandler.TransitionToScreen(ScreenTransitionHandler.ScreenName.LoginScreen, ScreenTransitionHandler.ScreenName.EmployeeScreen, true);
+            m_ScreenTransitionHandler.TransitionToScreen(ScreenTransitionHandler.ScreenName.LoginScreen, ScreenTransitionHandler.ScreenName.SupervisorScreen, true);
         }
     }
 

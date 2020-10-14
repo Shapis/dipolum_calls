@@ -7,13 +7,17 @@ public class ScrollableList : MonoBehaviour
 {
     [Header("Dependencies")]
     [SerializeField] private GameObject m_ContentContainer;
+    [SerializeField] private GameObject m_EmployeeInfoContainer;
 
     [SerializeField] private GameObject m_CallInfoEntry;
+    [SerializeField] private GameObject m_EmployeeInfoEntry;
 
-    private RectTransform m_RectTransform;
+    private RectTransform m_CallInfoContainerRectTransform;
+    private RectTransform m_EmployeeInfoContainerRectTransform;
     private void Awake()
     {
-        m_RectTransform = m_ContentContainer.GetComponent<RectTransform>();
+        m_CallInfoContainerRectTransform = m_ContentContainer.GetComponent<RectTransform>();
+        m_EmployeeInfoContainerRectTransform = m_EmployeeInfoContainer.GetComponent<RectTransform>();
     }
 
     // Start is called before the first frame update
@@ -30,10 +34,15 @@ public class ScrollableList : MonoBehaviour
 
     private void ResizeRect()
     {
-        m_RectTransform.sizeDelta =
-        new Vector2(m_RectTransform.sizeDelta.x,
+        m_CallInfoContainerRectTransform.sizeDelta =
+        new Vector2(m_CallInfoContainerRectTransform.sizeDelta.x,
         (
             10f + (m_ContentContainer.transform.childCount - 1) * (m_CallInfoEntry.gameObject.GetComponent<RectTransform>().sizeDelta.y + 10f)
+        ));
+
+        m_EmployeeInfoContainerRectTransform.sizeDelta = new Vector2(m_EmployeeInfoContainerRectTransform.sizeDelta.x,
+        (
+            10f + (m_EmployeeInfoContainer.transform.childCount - 1) * (m_EmployeeInfoEntry.gameObject.GetComponent<RectTransform>().sizeDelta.y + 10f)
         ));
     }
 }

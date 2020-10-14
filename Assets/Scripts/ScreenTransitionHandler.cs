@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScreenTransitionHandler : MonoBehaviour
 {
@@ -18,6 +19,12 @@ public class ScreenTransitionHandler : MonoBehaviour
     [SerializeField] private GameObject m_Callscreen;
     [SerializeField] private InputHandler m_InputHandler;
 
+    [SerializeField] private PopupMenuController m_CallScreenPopUpMenu;
+
+    [SerializeField] private Button m_BackButton1;
+    [SerializeField] private Button m_BackButton2;
+
+
     private bool busyTransitioning = false;
 
     private ScreenName? currentActiveScreen = null;
@@ -27,16 +34,27 @@ public class ScreenTransitionHandler : MonoBehaviour
     {
         m_SupervisorScreen.GetComponent<RectTransform>().position = new Vector2(Screen.width / 2f, (Screen.height / 2f) - Screen.height);
         m_EmployeeScreen.GetComponent<RectTransform>().position = new Vector2(Screen.width / 2f, (Screen.height / 2f) - Screen.height);
-        m_Callscreen.GetComponent<RectTransform>().position = new Vector2(Screen.width / 2f, (Screen.height / 2f) - Screen.height);
+        //m_Callscreen.GetComponent<RectTransform>().position = new Vector2(Screen.width / 2f, (Screen.height / 2f) - Screen.height);
         m_InputHandler.OnCancelPressedEvent += OnCancelPressed;
+
+        m_BackButton1.onClick.AddListener(() => OnCancelPressed(this, EventArgs.Empty));
+        m_BackButton2.onClick.AddListener(() => OnCancelPressed(this, EventArgs.Empty));
     }
 
     private void OnCancelPressed(object sender, EventArgs e)
     {
+        Debug.Log(!busyTransitioning && currentActiveScreen != null && currentActiveScreen != ScreenName.LoginScreen);
         if (!busyTransitioning && currentActiveScreen != null && currentActiveScreen != ScreenName.LoginScreen)
         {
+
+            if (m_Callscreen.activeSelf)
+            {
+                m_Callscreen.GetComponent<PopupMenuController>().CloseMenu();
+            }
+
             TransitionToScreen((ScreenName)currentActiveScreen, ScreenName.LoginScreen, false);
         }
+
     }
 
     public void TransitionToScreen(ScreenTransitionHandler.ScreenName previousScreen, ScreenTransitionHandler.ScreenName targetScreen, bool previousGoesUp)
@@ -45,11 +63,19 @@ public class ScreenTransitionHandler : MonoBehaviour
         {
             StartCoroutine(MoveScreen(m_LoginScreen, m_EmployeeScreen, 0.8f, true, targetScreen));
         }
-
-        if (previousScreen == ScreenName.EmployeeScreen && targetScreen == ScreenName.LoginScreen)
+        else if (previousScreen == ScreenName.EmployeeScreen && targetScreen == ScreenName.LoginScreen)
         {
             StartCoroutine(MoveScreen(m_EmployeeScreen, m_LoginScreen, 0.8f, false, targetScreen));
         }
+        else if (previousScreen == ScreenName.LoginScreen && targetScreen == ScreenName.SupervisorScreen)
+        {
+            StartCoroutine(MoveScreen(m_LoginScreen, m_SupervisorScreen, 0.8f, true, targetScreen));
+        }
+        else if (previousScreen == ScreenName.SupervisorScreen && targetScreen == ScreenName.LoginScreen)
+        {
+            StartCoroutine(MoveScreen(m_SupervisorScreen, m_LoginScreen, 0.8f, false, targetScreen));
+        }
+
 
 
     }
